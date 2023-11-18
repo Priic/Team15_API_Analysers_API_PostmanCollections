@@ -1,0 +1,18 @@
+﻿UserLoginEmail,Password,patientInfoValue,patientInfoBody,patientInfoUpdateBody,Testname,patientInfoValueUpdate,PatientEmailId,PatientPassword
+prichaseofc@gmail.com,Dahlia22,Thyroid,"{
+  ""FirstName"": ""Seema"",
+  ""LastName"": ""Smith"",
+  ""ContactNumber"": ""8024593333"",
+  ""Email"": ""Brooke@gmail.com"",
+  ""Allergy"": ""Walnut"",
+  ""FoodCategory"": ""Vegetarian"",
+  ""DateOfBirth"": ""2011-05-12""
+}","{
+  ""FirstName"": ""Seema"",
+  ""LastName"": ""Smith"",
+  ""ContactNumber"": ""8094593333"",
+  ""Email"": ""Brooke@gmail.com"",
+  ""Allergy"": ""Peanuts"",
+  ""FoodCategory"": ""Vegan"",
+  ""DateOfBirth"": ""2011-05-12""
+}",Average Glucose,Thyroid,Brooke@gmail.com,test
