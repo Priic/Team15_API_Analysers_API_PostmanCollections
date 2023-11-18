@@ -1,0 +1,1496 @@
+{
+	"info": {
+		"_postman_id": "a1e7c0e9-9a49-4290-8187-14352237ab1f",
+		"name": "Team15_API_Analyser_API_Hackathon_FinalE2E_Flow_Priyanka",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User logged in as Dietician",
+			"item": [
+				{
+					"name": "User Login with valid Dietician credentials Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4debe9b1-dc3b-4662-9435-6925cecad1c2",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									" \r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"ROLE_DIETICIAN\");\r",
+									"});\r",
+									"\r",
+									"const jsonData=JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"accessToken\", jsonData.token);\r",
+									"\r",
+									"console.log(jsonData.token);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "d6b60db5-40be-479f-a866-fab1330c2e8a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": ""
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"password\": \"{{Password}}\",\r\n  \"userLoginEmail\":\"{{UserLoginEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Patient1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cd7947aa-9892-4cae-8f43-7418b73bc34e",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"const jsonData=JSON.parse(responseBody);\r",
+									"var jsonResponse = pm.response.json();\r",
+									"console.log(jsonResponse);\r",
+									"var FileMorbidityValue = Object.keys(jsonResponse.FileMorbidity)[0];\r",
+									"console.log(\"Extracted value from FileMorbidityValue:\", FileMorbidityValue);\r",
+									"\r",
+									"pm.collectionVariables.set(\"PatientFileID\", FileMorbidityValue);\r",
+									"pm.collectionVariables.set(\"PatientFirstName\", jsonData.FirstName);\r",
+									"pm.collectionVariables.set(\"PatientLastName\", jsonData.LastName);\r",
+									"pm.collectionVariables.set(\"PatientId\", jsonData.patientId);\r",
+									"pm.collectionVariables.set(\"DieticianId\", jsonData.DieticianId);\r",
+									"pm.collectionVariables.set(\"PatientContactNumber\", jsonData.ContactNumber);\r",
+									"pm.collectionVariables.set(\"PatientDateOfBirth\", jsonData.DateOfBirth);\r",
+									"pm.collectionVariables.set(\"PatientEmail\", jsonData.Email);\r",
+									"\r",
+									"\r",
+									"console.log(jsonData.DieticianId);\r",
+									"console.log(jsonData.patientId);\r",
+									"console.log(jsonData.FirstName);\r",
+									"console.log(jsonData.LastName);\r",
+									"console.log(jsonData.DateOfBirth);\r",
+									"console.log(jsonData.Email);\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "37604984-33b9-45e2-8827-e533fc02a324",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "patientInfo",
+									"type": "text",
+									"value": "{{patientInfoBody}}"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/Dietician_API_Hackathon-20231115T023211Z-001/Team15_API_Analysers_API_Hackathon/Testdata/HyperThyroid_Report_final.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BaseURL}}/patient?patientInfo={{patientInfoValue}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"patient"
+							],
+							"query": [
+								{
+									"key": "patientInfo",
+									"value": "{{patientInfoValue}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all patient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1cd1cfc4-6126-46a8-a186-55958656692b",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "5c5f757f-2799-4bdb-9637-668e136f2e0f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/patient"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Morbidity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bc27f85e-1550-406f-8189-8630e8be26e7",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "d5359016-0711-427b-b962-6282acfdae69",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/morbidity"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Patient Test Reports by patientID Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a30fc3d-4641-4f88-8f31-d230be8c29d4",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "61f31faa-ba4b-4088-b6e0-a2ef37509261",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "{{BaseURL}}/patient/testReports/{{PatientId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Morbidity by Test name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bfeabbb6-dae5-438f-ad1c-08b46a50c2a7",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "d2e291f3-236c-44fb-bba5-fc59340a1420",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/morbidity/{{Testname}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Patient Test Reports by fileId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8cd8b71c-7615-47eb-9fea-a156dcdab2fa",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "f8aa0738-8b60-43da-ab07-8ad172747036",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/patient/testReports/viewFile/{{PatientFileID}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update the patient by patient id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "134a0f21-a370-4174-9599-a7ffe203eef4",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "761f915b-104d-4471-810b-a0c349c4c225",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "patientInfo",
+									"type": "text",
+									"value": "{{patientInfoUpdateBody}}"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/Dietician_API_Hackathon-20231115T023211Z-001/Team15-API Analysers-API Hackathon/Testdata/Hypo Thyroid-Report.pdf.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BaseURL}}/patient/{{PatientId}}?patientInfo={{patientInfoValueUpdate}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"patient",
+								"{{PatientId}}"
+							],
+							"query": [
+								{
+									"key": "patientInfo",
+									"value": "{{patientInfoValueUpdate}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete the Patient1 by patient id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4dfac51c-1308-4612-9eb5-8b729731fac8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "520d52fb-fd76-4952-964c-2fc445c1deee",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "{{BaseURL}}/patient/{{PatientId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Patient2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cd7947aa-9892-4cae-8f43-7418b73bc34e",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"const jsonData=JSON.parse(responseBody);\r",
+									"var jsonResponse = pm.response.json();\r",
+									"console.log(jsonResponse);\r",
+									"var FileMorbidityValue = Object.keys(jsonResponse.FileMorbidity)[0];\r",
+									"console.log(\"Extracted value from FileMorbidityValue:\", FileMorbidityValue);\r",
+									"\r",
+									"pm.collectionVariables.set(\"PatientFileID\", FileMorbidityValue);\r",
+									"pm.collectionVariables.set(\"PatientFirstName\", jsonData.FirstName);\r",
+									"pm.collectionVariables.set(\"PatientLastName\", jsonData.LastName);\r",
+									"pm.collectionVariables.set(\"PatientId\", jsonData.patientId);\r",
+									"pm.collectionVariables.set(\"DieticianId\", jsonData.DieticianId);\r",
+									"pm.collectionVariables.set(\"PatientContactNumber\", jsonData.ContactNumber);\r",
+									"pm.collectionVariables.set(\"PatientDateOfBirth\", jsonData.DateOfBirth);\r",
+									"pm.collectionVariables.set(\"PatientEmail\", jsonData.Email);\r",
+									"\r",
+									"\r",
+									"console.log(jsonData.DieticianId);\r",
+									"console.log(jsonData.patientId);\r",
+									"console.log(jsonData.FirstName);\r",
+									"console.log(jsonData.LastName);\r",
+									"console.log(jsonData.DateOfBirth);\r",
+									"console.log(jsonData.Email);\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "dbb93e75-1dc0-4fc3-99b6-44e4a9e163cd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "patientInfo",
+									"type": "text",
+									"value": "{{patientInfoBody}}"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/Dietician_API_Hackathon-20231115T023211Z-001/Team15_API_Analysers_API_Hackathon/Testdata/HyperThyroid_Report_final.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BaseURL}}/patient?patientInfo={{patientInfoValue}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"patient"
+							],
+							"query": [
+								{
+									"key": "patientInfo",
+									"value": "{{patientInfoValue}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout as a Dietician",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1cd1cfc4-6126-46a8-a186-55958656692b",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "198770c5-49dd-4120-bba7-ff8fe92138db",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/logoutdietician"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all patient Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1cd1cfc4-6126-46a8-a186-55958656692b",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "298a3db3-d9f3-43f6-8831-5129f2a56437",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/patient"
+					},
+					"response": []
+				},
+				{
+					"name": "Update the patient2 by patient id Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "134a0f21-a370-4174-9599-a7ffe203eef4",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "8e5731f8-d016-4f10-b5af-92a3f9f93632",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "patientInfo",
+									"type": "text",
+									"value": "{{patientInfoUpdateBody}}"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/Dietician_API_Hackathon-20231115T023211Z-001/Team15-API Analysers-API Hackathon/Testdata/Hypo Thyroid-Report.pdf.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BaseURL}}/patient/{{PatientId}}?patientInfo={{patientInfoValueUpdate}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"patient",
+								"{{PatientId}}"
+							],
+							"query": [
+								{
+									"key": "patientInfo",
+									"value": "{{patientInfoValueUpdate}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Patient Test Reports by fileId Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8cd8b71c-7615-47eb-9fea-a156dcdab2fa",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "ea1c458f-5807-42cd-8b61-638722d3b443",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/patient/testReports/viewFile/{{PatientFileID}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Morbidity by Test name Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bfeabbb6-dae5-438f-ad1c-08b46a50c2a7",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "8c890146-bcaa-411a-b9bd-f40193f00511",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/morbidity/{{Testname}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Morbidity Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bc27f85e-1550-406f-8189-8630e8be26e7",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "9cece073-066e-4bec-ba47-276cb5877fa0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/morbidity"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Patient Test Reports by patientID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a30fc3d-4641-4f88-8f31-d230be8c29d4",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "dc37cd8b-999a-41cd-b991-85146e7639b7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "{{BaseURL}}/patient/testReports/{{PatientId}}"
+					},
+					"response": []
+				}
+			],
+			"id": "c52e9012-b2e7-4602-a354-9a21fd891eb2"
+		},
+		{
+			"name": "User Logged in as Patient",
+			"item": [
+				{
+					"name": "User Login with valid Patient credentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d5d5dcc2-f73d-424c-a66a-92f5c4c408e2",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"ROLE_PATIENT\");\r",
+									"});\r",
+									"\r",
+									"const jsonData=JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"patientsAccessToken\", jsonData.token);\r",
+									"\r",
+									"console.log(jsonData.token);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "a5a0770b-e3c4-41a2-9def-b42f8f872f1f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": ""
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"password\": \"{{PatientPassword}}\",\r\n  \"userLoginEmail\":\"{{PatientEmailId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Patient logged in to view Test Reports by patientID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a30fc3d-4641-4f88-8f31-d230be8c29d4",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "38ec6b79-0a4d-4a5a-aa8c-1b901dc7c0e3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{patientsAccessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "{{BaseURL}}/patient/testReports/{{PatientId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Patient logged in to view  Test Reports by fileId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8cd8b71c-7615-47eb-9fea-a156dcdab2fa",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "3f97d7b5-52b8-4868-b028-71c20f2c81a1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{patientsAccessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/patient/testReports/viewFile/{{PatientFileID}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all patient Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1cd1cfc4-6126-46a8-a186-55958656692b",
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "67b09c9e-add6-4311-838d-2cac0bc1dd41",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{patientsAccessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/patient"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Morbidity by Test name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bfeabbb6-dae5-438f-ad1c-08b46a50c2a7",
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "c9447ff3-45ef-4006-a2ae-2229cc988813",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{patientsAccessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/morbidity/{{Testname}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Morbidity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bc27f85e-1550-406f-8189-8630e8be26e7",
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "3815732d-ff6c-4174-94cc-dfdd938d5b8a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{patientsAccessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/morbidity"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout as a Patient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1cd1cfc4-6126-46a8-a186-55958656692b",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "f9754627-0ce5-4703-9f51-f40502e2276d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{patientsAccessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/logoutdietician"
+					},
+					"response": []
+				}
+			],
+			"id": "d818d07b-dc5d-44f9-989e-cf4da8983db5"
+		},
+		{
+			"name": "User Logged in as Dietician again to delete the patient",
+			"item": [
+				{
+					"name": "User Login with valid Dietician credentials Copy 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d5d5dcc2-f73d-424c-a66a-92f5c4c408e2",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"ROLE_DIETICIAN\");\r",
+									"});\r",
+									"\r",
+									"const jsonData=JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"accessToken\", jsonData.token);\r",
+									"\r",
+									"console.log(jsonData.token);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "dd80d325-a841-421c-b56d-720d0c79d0cc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": ""
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"password\": \"{{Password}}\",\r\n  \"userLoginEmail\":\"{{UserLoginEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete the Patient2 by patient id Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4dfac51c-1308-4612-9eb5-8b729731fac8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "57de5a73-13fa-4ec5-9645-e52f2c5a1e0c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "{{BaseURL}}/patient/{{PatientId}}"
+					},
+					"response": []
+				}
+			],
+			"id": "9ca88a6c-afd3-44b3-a38c-dd950940b4e1"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "bbc13579-07ff-4bec-a924-ea2ff9fd4eba",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "10edf34a-498b-4d7f-b85d-1b10d65f3bab",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseURL",
+			"value": "dietician-dev-41d9a344a720.herokuapp.com/dietician"
+		},
+		{
+			"key": "accessToken",
+			"value": ""
+		},
+		{
+			"key": "PatientFirstName",
+			"value": ""
+		},
+		{
+			"key": "PatientLastName",
+			"value": ""
+		},
+		{
+			"key": "PatientId",
+			"value": ""
+		},
+		{
+			"key": "DieticianId",
+			"value": ""
+		},
+		{
+			"key": "PatientContactNumber",
+			"value": ""
+		},
+		{
+			"key": "PatientDateOfBirth",
+			"value": ""
+		},
+		{
+			"key": "PatientEmail",
+			"value": ""
+		},
+		{
+			"key": "PatientFileID",
+			"value": ""
+		},
+		{
+			"key": "PatientFileID1",
+			"value": ""
+		},
+		{
+			"key": "patientsAccessToken",
+			"value": ""
+		}
+	]
+}
