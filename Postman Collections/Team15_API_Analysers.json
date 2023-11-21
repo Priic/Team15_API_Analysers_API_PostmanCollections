@@ -28,6 +28,18 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
 									"});\r",
 									"\r",
+									"pm.test(\"UserLoginEmail should be a string\", function () {\r",
+									"    pm.expect(typeof pm.response.json().userLoginEmail).to.equal('string');\r",
+									"    // Additional check for a valid email format if needed\r",
+									"    pm.expect(pm.response.json().userLoginEmail).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Password should be a string\", function () {\r",
+									"    pm.expect(typeof pm.response.json().password).to.equal('string');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
 									"pm.test(\"Body matches string\", function () {\r",
 									"    pm.expect(pm.response.text()).to.include(\"ROLE_DIETICIAN\");\r",
 									"});\r",
@@ -533,6 +545,15 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
 									"});\r",
 									"\r",
+									"pm.test(\"UserLoginEmail should be a string\", function () {\r",
+									"    pm.expect(typeof pm.response.json().userLoginEmail).to.equal('string');\r",
+									"    // Additional check for a valid email format if needed\r",
+									"    pm.expect(pm.response.json().userLoginEmail).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Password should be a string\", function () {\r",
+									"    pm.expect(typeof pm.response.json().password).to.equal('string');\r",
+									"});\r",
 									"\r",
 									"const jsonData=JSON.parse(responseBody);\r",
 									"var jsonResponse = pm.response.json();\r",
@@ -992,6 +1013,16 @@
 									"    pm.expect(pm.response.text()).to.include(\"ROLE_PATIENT\");\r",
 									"});\r",
 									"\r",
+									"pm.test(\"UserLoginEmail should be a string\", function () {\r",
+									"    pm.expect(typeof pm.response.json().userLoginEmail).to.equal('string');\r",
+									"    // Additional check for a valid email format if needed\r",
+									"    pm.expect(pm.response.json().userLoginEmail).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Password should be a string\", function () {\r",
+									"    pm.expect(typeof pm.response.json().password).to.equal('string');\r",
+									"});\r",
+									"\r",
 									"const jsonData=JSON.parse(responseBody);\r",
 									"pm.collectionVariables.set(\"patientsAccessToken\", jsonData.token);\r",
 									"\r",
@@ -1416,6 +1447,54 @@
 						"url": "{{BaseURL}}/patient/{{PatientId}}"
 					},
 					"response": []
+				},
+				{
+					"name": "Logout as a Dietician Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1cd1cfc4-6126-46a8-a186-55958656692b",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "06e2acb7-587e-4df2-a7f2-fe68633f7fa2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/logoutdietician"
+					},
+					"response": []
 				}
 			],
 			"id": "9ca88a6c-afd3-44b3-a38c-dd950940b4e1"
@@ -1445,50 +1524,62 @@
 	],
 	"variable": [
 		{
+			"id": "a47c358f-3f77-4f31-978d-55e935470e8f",
 			"key": "BaseURL",
 			"value": "dietician-dev-41d9a344a720.herokuapp.com/dietician"
 		},
 		{
+			"id": "8504a75d-85e1-44b5-ab2e-b6aa77ecebc7",
 			"key": "accessToken",
 			"value": ""
 		},
 		{
+			"id": "d475c12e-d885-44a8-8920-3445def0dfe4",
 			"key": "PatientFirstName",
 			"value": ""
 		},
 		{
+			"id": "b75237ca-f1a9-48b2-ba5b-9866e2106f07",
 			"key": "PatientLastName",
 			"value": ""
 		},
 		{
+			"id": "f1d7f1e3-91aa-45ec-9fef-110c8efb1fab",
 			"key": "PatientId",
 			"value": ""
 		},
 		{
+			"id": "929e8e1b-a185-40a3-905f-b01e9e7df8e9",
 			"key": "DieticianId",
 			"value": ""
 		},
 		{
+			"id": "0780cae5-e630-41a6-a9f8-135418392399",
 			"key": "PatientContactNumber",
 			"value": ""
 		},
 		{
+			"id": "27fdd5af-aa68-489d-a954-045d9a8d76f4",
 			"key": "PatientDateOfBirth",
 			"value": ""
 		},
 		{
+			"id": "fe2735c3-985f-43ac-a8f2-a0103c86c666",
 			"key": "PatientEmail",
 			"value": ""
 		},
 		{
+			"id": "c9209abc-f3a8-47b9-beb3-8fed772b9f60",
 			"key": "PatientFileID",
 			"value": ""
 		},
 		{
+			"id": "6cf806d9-91b3-43ea-9fde-439ef46e57a3",
 			"key": "PatientFileID1",
 			"value": ""
 		},
 		{
+			"id": "2ec9d72d-c672-484c-b1ea-e40b636d8eaf",
 			"key": "patientsAccessToken",
 			"value": ""
 		}
